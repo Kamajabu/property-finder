@@ -12,6 +12,7 @@ function App() {
   const [editingProperty, setEditingProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lastAddedProperty, setLastAddedProperty] = useState(null);
 
   useEffect(() => {
     loadProperties();
@@ -61,7 +62,11 @@ function App() {
       };
       const savedProperty = await addPropertyToFirebase(newProperty);
       setProperties([...properties, savedProperty]);
+      setLastAddedProperty(savedProperty);
       setShowForm(false);
+      
+      // Clear last added property after a short delay to reset map behavior
+      setTimeout(() => setLastAddedProperty(null), 1000);
     } catch (err) {
       console.error('Błąd dodawania nieruchomości:', err);
       alert('Nie udało się dodać nieruchomości');
@@ -168,7 +173,7 @@ function App() {
         ) : (
           <div className="combined-view">
             <div className="map-section">
-              <MapView properties={properties} onDelete={deleteProperty} onEdit={setEditingProperty} />
+              <MapView properties={properties} onDelete={deleteProperty} onEdit={setEditingProperty} lastAddedProperty={lastAddedProperty} />
             </div>
             <div className="list-section">
               <ListView properties={properties} onDelete={deleteProperty} onEdit={setEditingProperty} />

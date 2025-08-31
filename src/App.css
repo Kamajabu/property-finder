@@ -135,14 +135,35 @@
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .list-controls select {
-  padding: 0.5rem 1rem;
-  border: 2px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
   background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.list-controls select:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.list-controls select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .list-section .properties-list {
@@ -162,11 +183,12 @@
   overflow: hidden;
   display: flex;
   gap: 1rem;
+  min-height: 250px;
 }
 
 .property-image {
   flex: 0 0 150px;
-  height: 150px;
+  height: 250px;
 }
 
 .property-thumbnail {
@@ -193,6 +215,19 @@
 .property-content {
   flex: 1;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+}
+
+.property-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-btn {
+  margin-top: auto;
 }
 
 .property-card:hover {
@@ -221,10 +256,11 @@
   background: transparent;
   color: #6c757d;
   border: 1px solid #dee2e6;
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   line-height: 1;
   transition: all 0.2s ease;
 }
@@ -237,10 +273,11 @@
 
 .property-header .delete-btn {
   margin: 0;
-  padding: 0.2rem 0.6rem;
+  padding: 0.4rem 0.8rem;
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 500;
   line-height: 1;
+  border-radius: 8px;
 }
 
 .price {
@@ -522,16 +559,19 @@
   background: #667eea;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .details-btn:hover {
   background: #5a6fd8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .details-btn-small {

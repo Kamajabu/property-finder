@@ -13,22 +13,26 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-function FitBounds({ properties }) {
+function FitBounds({ properties, lastAddedProperty }) {
   const map = useMap();
   
   useEffect(() => {
-    if (properties.length > 0) {
+    if (lastAddedProperty) {
+      // Center on the newly added property
+      map.setView(lastAddedProperty.coordinates, 15);
+    } else if (properties.length > 0) {
+      // Fit all properties on initial load
       const group = new L.featureGroup(
         properties.map(property => L.marker(property.coordinates))
       );
       map.fitBounds(group.getBounds().pad(0.1));
     }
-  }, [map, properties]);
+  }, [map, properties, lastAddedProperty]);
   
   return null;
 }
 
-function MapView({ properties, onDelete, onEdit }) {
+function MapView({ properties, onDelete, onEdit, lastAddedProperty }) {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   
@@ -57,7 +61,7 @@ function MapView({ properties, onDelete, onEdit }) {
             />
           </LayersControl.BaseLayer>
         </LayersControl>
-        <FitBounds properties={properties} />
+        <FitBounds properties={properties} lastAddedProperty={lastAddedProperty} />
         {properties.map((property) => (
           <Marker key={property.id} position={property.coordinates}>
             <Popup>

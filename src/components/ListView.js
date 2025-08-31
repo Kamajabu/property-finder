@@ -6,16 +6,14 @@ import { getPriceColor, getPriceLightColor } from '../utils/colorUtils';
 function ListView({ properties, onDelete, onEdit }) {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [filter, setFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [transactionFilter, setTransactionFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
   const filteredProperties = properties.filter(property => {
-    if (filter === 'all') return true;
-    if (filter === 'wynajem') return property.transactionType === 'wynajem';
-    if (filter === 'sprzedaż') return property.transactionType === 'sprzedaż';
-    if (filter === 'mieszkanie') return property.type === 'mieszkanie';
-    if (filter === 'dom') return property.type === 'dom';
-    return true;
+    const typeMatch = typeFilter === 'all' || property.type === typeFilter;
+    const transactionMatch = transactionFilter === 'all' || property.transactionType === transactionFilter;
+    return typeMatch && transactionMatch;
   });
 
   const sortedProperties = [...filteredProperties].sort((a, b) => {
@@ -33,12 +31,16 @@ function ListView({ properties, onDelete, onEdit }) {
   return (
     <div className="list-container">
       <div className="list-controls">
-        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="all">Wszystkie Nieruchomości</option>
-          <option value="wynajem">Wynajem</option>
-          <option value="sprzedaż">Sprzedaż</option>
+        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+          <option value="all">Wszystkie Typy</option>
           <option value="mieszkanie">Mieszkania</option>
           <option value="dom">Domy</option>
+        </select>
+        
+        <select value={transactionFilter} onChange={(e) => setTransactionFilter(e.target.value)}>
+          <option value="all">Wszystkie Transakcje</option>
+          <option value="wynajem">Wynajem</option>
+          <option value="sprzedaż">Sprzedaż</option>
         </select>
         
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
