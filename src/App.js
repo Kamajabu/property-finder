@@ -8,7 +8,6 @@ import propertiesData from './data/properties.json';
 
 function App() {
   const [properties, setProperties] = useState([]);
-  const [view, setView] = useState('map');
   const [showForm, setShowForm] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
   const [loading, setLoading] = useState(true);

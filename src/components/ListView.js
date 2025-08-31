@@ -6,8 +6,6 @@ import { getPriceColor, getPriceLightColor } from '../utils/colorUtils';
 function ListView({ properties, onDelete, onEdit }) {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [editingProperty, setEditingProperty] = useState(null);
-  const [showEditForm, setShowEditForm] = useState(false);
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
