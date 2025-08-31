@@ -134,7 +134,7 @@ function App() {
   return (
     <div className="App">
       <header className="header">
-        <h1>Wyszukiwarka Nieruchomości</h1>
+        <h1>Katalog Nieruchomości</h1>
         <div className="controls">
           <button 
             onClick={() => setShowForm(!showForm)}

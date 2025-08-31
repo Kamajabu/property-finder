@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, LayersControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import PropertyDetails from './PropertyDetails';
@@ -28,10 +28,20 @@ function MapView({ properties, onDelete, onEdit }) {
         zoom={13} 
         style={{ height: '500px', width: '100%' }}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer checked name="Mapa">
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Satelita">
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution='&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            />
+          </LayersControl.BaseLayer>
+        </LayersControl>
         {properties.map((property) => (
           <Marker key={property.id} position={property.coordinates}>
             <Popup>
