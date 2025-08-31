@@ -23,6 +23,11 @@ export const addProperty = async (property) => {
 export const updateProperty = async (id, property) => {
   try {
     console.log('Updating property with ID:', id, 'Data:', property);
+    
+    if (!id) {
+      throw new Error('Property ID is undefined or null');
+    }
+    
     const propertyRef = doc(db, COLLECTION_NAME, id);
     await updateDoc(propertyRef, property);
     console.log('Property updated successfully in Firebase');

@@ -154,11 +154,45 @@
 .property-card {
   background: white;
   border-radius: 10px;
-  padding: 2rem;
+  padding: 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   border: 1px solid rgba(0,0,0,0.05);
   transition: all 0.2s ease;
   margin: 0.5rem 0;
+  overflow: hidden;
+  display: flex;
+  gap: 1rem;
+}
+
+.property-image {
+  flex: 0 0 150px;
+  height: 150px;
+}
+
+.property-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-radius: 5px;
+}
+
+.placeholder-text {
+  font-size: 2rem;
+  filter: brightness(0.8);
+}
+
+.property-content {
+  flex: 1;
+  padding: 2rem;
 }
 
 .property-card:hover {
@@ -498,6 +532,33 @@
   background: #5a6fd8;
 }
 
+.popup-image {
+  width: 100%;
+  max-width: 200px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.popup-placeholder {
+  width: 100%;
+  max-width: 200px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .property-details-overlay {
   position: fixed;
   top: 0;
@@ -667,6 +728,32 @@
   display: flex;
   gap: 1rem;
   align-items: baseline;
+}
+
+.modal-image-section {
+  margin-bottom: 2rem;
+}
+
+.modal-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.modal-placeholder {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid;
+  border-radius: 10px;
+}
+
+.placeholder-text-large {
+  font-size: 4rem;
+  filter: brightness(0.8);
 }
 
 .action-buttons {

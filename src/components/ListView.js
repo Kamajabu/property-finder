@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropertyDetails from './PropertyDetails';
 import { formatPrice } from '../utils/formatPrice';
+import { getPriceColor, getPriceLightColor } from '../utils/colorUtils';
 
-function ListView({ properties, onDelete }) {
+function ListView({ properties, onDelete, onEdit }) {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
@@ -52,26 +53,39 @@ function ListView({ properties, onDelete }) {
       <div className="properties-list">
         {sortedProperties.map((property) => (
           <div key={property.id} className="property-card">
-            <div className="property-header">
-              <h3>{property.name}</h3>
-              <div className="card-actions">
-                <button 
-                  onClick={() => {
-                    setEditingProperty(property);
-                    setShowEditForm(true);
+            <div className="property-image">
+              {property.imageUrl ? (
+                <img src={property.imageUrl} alt={property.name} className="property-thumbnail" />
+              ) : (
+                <div 
+                  className="property-placeholder"
+                  style={{
+                    backgroundColor: getPriceColor(property.price),
+                    borderColor: getPriceLightColor(property.price)
                   }}
-                  className="edit-btn-small"
                 >
-                  ✏️
-                </button>
-                <button 
-                  onClick={() => onDelete(property.id)}
-                  className="delete-btn"
-                >
-                  ✕
-                </button>
-              </div>
+                  <span className="placeholder-text">🏠</span>
+                </div>
+              )}
             </div>
+            <div className="property-content">
+              <div className="property-header">
+                <h3>{property.name}</h3>
+                <div className="card-actions">
+                  <button 
+                    onClick={() => onEdit(property)}
+                    className="edit-btn-small"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    onClick={() => onDelete(property.id)}
+                    className="delete-btn"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
             
             <div className="property-details">
               <div className="price">
@@ -106,6 +120,7 @@ function ListView({ properties, onDelete }) {
                 Zobacz Szczegóły →
               </button>
             </div>
+            </div>
           </div>
         ))}
       </div>
@@ -120,6 +135,7 @@ function ListView({ properties, onDelete }) {
         property={selectedProperty}
         isOpen={showDetails}
         onClose={() => setShowDetails(false)}
+        onEdit={onEdit}
       />
     </div>
   );

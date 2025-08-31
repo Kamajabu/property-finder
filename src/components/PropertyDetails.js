@@ -1,7 +1,8 @@
 import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
+import { getPriceColor, getPriceLightColor } from '../utils/colorUtils';
 
-function PropertyDetails({ property, isOpen, onClose }) {
+function PropertyDetails({ property, isOpen, onClose, onEdit }) {
   if (!isOpen || !property) return null;
 
   return (
@@ -13,6 +14,22 @@ function PropertyDetails({ property, isOpen, onClose }) {
         </div>
         
         <div className="modal-content">
+          <div className="modal-image-section">
+            {property.imageUrl ? (
+              <img src={property.imageUrl} alt={property.name} className="modal-image" />
+            ) : (
+              <div 
+                className="modal-placeholder"
+                style={{
+                  backgroundColor: getPriceColor(property.price),
+                  borderColor: getPriceLightColor(property.price)
+                }}
+              >
+                <span className="placeholder-text-large">🏠</span>
+              </div>
+            )}
+          </div>
+          
           <div className="price-section">
             <div className="main-price">{formatPrice(property.price)} PLN</div>
             <div className="badges-container">
@@ -78,7 +95,10 @@ function PropertyDetails({ property, isOpen, onClose }) {
           </div>
 
           <div className="action-buttons">
-            <button className="edit-btn" onClick={() => console.log('Edit', property.id)}>
+            <button className="edit-btn" onClick={() => {
+              onEdit(property);
+              onClose();
+            }}>
               Edytuj
             </button>
             {property.link && (

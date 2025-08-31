@@ -1,9 +1,27 @@
 import React, { useState } from 'react';
 
-function PropertyForm({ onSubmit, onCancel }) {
-  const [formData, setFormData] = useState({
+function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
+  const [formData, setFormData] = useState(property ? {
+    name: property.name,
+    link: property.link || '',
+    imageUrl: property.imageUrl || '',
+    price: property.price.toString(),
+    currency: 'PLN',
+    type: property.type,
+    transactionType: property.transactionType,
+    address: '',
+    lat: property.coordinates[0].toString(),
+    lng: property.coordinates[1].toString(),
+    area: property.metrics.area.toString(),
+    rooms: property.metrics.rooms.toString(),
+    floor: property.metrics.floor?.toString() || '',
+    description: property.details.description || '',
+    amenities: property.details.amenities?.join(', ') || '',
+    yearBuilt: property.details.yearBuilt?.toString() || ''
+  } : {
     name: '',
     link: '',
+    imageUrl: '',
     price: '',
     currency: 'PLN',
     type: 'mieszkanie',
@@ -13,7 +31,6 @@ function PropertyForm({ onSubmit, onCancel }) {
     lng: '',
     area: '',
     rooms: '',
-    bathrooms: '',
     floor: '',
     description: '',
     amenities: '',
@@ -77,9 +94,10 @@ function PropertyForm({ onSubmit, onCancel }) {
       return;
     }
 
-    const property = {
+    const propertyToSubmit = {
       name: formData.name,
       link: formData.link,
+      imageUrl: formData.imageUrl,
       price: parseFloat(formData.price),
       currency: 'PLN',
       type: formData.type,
@@ -87,10 +105,9 @@ function PropertyForm({ onSubmit, onCancel }) {
       lat: coordinates[0],
       lng: coordinates[1],
       metrics: {
-        area: parseFloat(formData.area) || 0,
-        rooms: parseInt(formData.rooms) || 0,
-        bathrooms: parseInt(formData.bathrooms) || 0,
-        floor: formData.floor ? parseInt(formData.floor) : null
+        area: formData.area ? parseFloat(formData.area) : 0,
+        rooms: formData.rooms ? parseInt(formData.rooms) : 0,
+        floor: formData.type === 'mieszkanie' && formData.floor ? parseInt(formData.floor) : null
       },
       details: {
         description: formData.description,
@@ -99,10 +116,16 @@ function PropertyForm({ onSubmit, onCancel }) {
       }
     };
 
-    onSubmit(property);
+    // If we're editing, preserve the original property ID
+    if (property && property.id) {
+      propertyToSubmit.id = property.id;
+    }
+
+    onSubmit(propertyToSubmit);
     setFormData({
       name: '',
       link: '',
+      imageUrl: '',
       price: '',
       currency: 'PLN',
       type: 'mieszkanie',
@@ -112,7 +135,6 @@ function PropertyForm({ onSubmit, onCancel }) {
       lng: '',
       area: '',
       rooms: '',
-      bathrooms: '',
       floor: '',
       description: '',
       amenities: '',
@@ -130,7 +152,7 @@ function PropertyForm({ onSubmit, onCancel }) {
   return (
     <div className="property-form-overlay">
       <form className="property-form" onSubmit={handleSubmit}>
-        <h2>Dodaj Nową Nieruchomość</h2>
+        <h2>{isEditing ? 'Edytuj Nieruchomość' : 'Dodaj Nową Nieruchomość'}</h2>
         
         <div className="form-row">
           <input
@@ -149,6 +171,16 @@ function PropertyForm({ onSubmit, onCancel }) {
             name="link"
             placeholder="Link do Nieruchomości"
             value={formData.link}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-row">
+          <input
+            type="url"
+            name="imageUrl"
+            placeholder="Link do Zdjęcia"
+            value={formData.imageUrl}
             onChange={handleChange}
           />
         </div>
@@ -227,20 +259,15 @@ function PropertyForm({ onSubmit, onCancel }) {
             value={formData.rooms}
             onChange={handleChange}
           />
-          <input
-            type="number"
-            name="bathrooms"
-            placeholder="Łazienki"
-            value={formData.bathrooms}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="floor"
-            placeholder="Piętro"
-            value={formData.floor}
-            onChange={handleChange}
-          />
+          {formData.type === 'mieszkanie' && (
+            <input
+              type="number"
+              name="floor"
+              placeholder="Piętro"
+              value={formData.floor}
+              onChange={handleChange}
+            />
+          )}
         </div>
 
         <div className="form-row">
@@ -278,7 +305,7 @@ function PropertyForm({ onSubmit, onCancel }) {
             Anuluj
           </button>
           <button type="submit" className="submit-btn">
-            Dodaj Nieruchomość
+            {isEditing ? 'Zapisz Zmiany' : 'Dodaj Nieruchomość'}
           </button>
         </div>
       </form>

@@ -3,13 +3,14 @@ import './App.css';
 import MapView from './components/MapView';
 import ListView from './components/ListView';
 import PropertyForm from './components/PropertyForm';
-import { getProperties, addProperty as addPropertyToFirebase, deleteProperty as deletePropertyFromFirebase } from './services/propertyService';
+import { getProperties, addProperty as addPropertyToFirebase, updateProperty as updatePropertyInFirebase, deleteProperty as deletePropertyFromFirebase } from './services/propertyService';
 import propertiesData from './data/properties.json';
 
 function App() {
   const [properties, setProperties] = useState([]);
   const [view, setView] = useState('map');
   const [showForm, setShowForm] = useState(false);
+  const [editingProperty, setEditingProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -93,6 +94,43 @@ function App() {
     }
   };
 
+  const editProperty = async (property) => {
+    try {
+      if (!process.env.REACT_APP_FIREBASE_API_KEY) {
+        const updatedProperties = properties.map(p => 
+          p.id === property.id ? { ...property, coordinates: [parseFloat(property.lat), parseFloat(property.lng)] } : p
+        );
+        setProperties(updatedProperties);
+        setEditingProperty(null);
+        return;
+      }
+      
+      const { lat, lng, id, ...propertyData } = property;
+      
+      // Filter out undefined values and ensure proper data structure
+      const cleanPropertyData = Object.fromEntries(
+        Object.entries(propertyData).filter(([key, value]) => value !== undefined)
+      );
+      
+      const updatedProperty = {
+        ...cleanPropertyData,
+        coordinates: [parseFloat(lat), parseFloat(lng)]
+      };
+      
+      console.log('Editing property with ID:', property.id, 'Clean data:', updatedProperty);
+      
+      await updatePropertyInFirebase(property.id, updatedProperty);
+      const updatedProperties = properties.map(p => 
+        p.id === property.id ? { ...updatedProperty, id: property.id } : p
+      );
+      setProperties(updatedProperties);
+      setEditingProperty(null);
+    } catch (err) {
+      console.error('Błąd edycji nieruchomości:', err);
+      alert('Nie udało się zaktualizować nieruchomości');
+    }
+  };
+
   return (
     <div className="App">
       <header className="header">
@@ -114,6 +152,15 @@ function App() {
         />
       )}
       
+      {editingProperty && (
+        <PropertyForm 
+          property={editingProperty}
+          onSubmit={editProperty} 
+          onCancel={() => setEditingProperty(null)} 
+          isEditing={true}
+        />
+      )}
+      
       <main className="main-content">
         {loading ? (
           <div className="loading">Ładowanie...</div>
@@ -122,10 +169,10 @@ function App() {
         ) : (
           <div className="combined-view">
             <div className="map-section">
-              <MapView properties={properties} onDelete={deleteProperty} />
+              <MapView properties={properties} onDelete={deleteProperty} onEdit={setEditingProperty} />
             </div>
             <div className="list-section">
-              <ListView properties={properties} onDelete={deleteProperty} />
+              <ListView properties={properties} onDelete={deleteProperty} onEdit={setEditingProperty} />
             </div>
           </div>
         )}
