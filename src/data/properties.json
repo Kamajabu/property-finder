@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "name": "Nowoczesne Mieszkanie w Centrum",
+    "link": "https://otodom.pl/pl/oferta/mieszkanie-52-5m2-2-pokoje-warszawa-srodmiescie-id123456",
+    "price": 3500,
+    "currency": "PLN",
+    "type": "mieszkanie",
+    "transactionType": "wynajem",
+    "coordinates": [52.2297, 21.0122],
+    "metrics": {
+      "area": 52.5,
+      "rooms": 2,
+      "bathrooms": 1,
+      "floor": 5
+    },
+    "details": {
+      "description": "Luksusowe mieszkanie w centrum z widokiem na miasto",
+      "amenities": ["Siłownia", "Taras na dachu", "Parking"],
+      "yearBuilt": 2018
+    }
+  },
+  {
+    "id": "2",
+    "name": "Dom Rodzinny na Przedmieściach",
+    "link": "https://otodom.pl/pl/oferta/dom-150m2-4-pokoje-warszawa-mokotow-id789012",
+    "price": 1200000,
+    "currency": "PLN",
+    "type": "dom",
+    "transactionType": "sprzedaż",
+    "coordinates": [52.1672, 21.0128],
+    "metrics": {
+      "area": 150,
+      "rooms": 4,
+      "bathrooms": 2,
+      "floor": 2
+    },
+    "details": {
+      "description": "Przestronny dom rodzinny z ogrodem",
+      "amenities": ["Ogród", "Garaż", "Piwnica"],
+      "yearBuilt": 2010
+    }
+  }
+]
