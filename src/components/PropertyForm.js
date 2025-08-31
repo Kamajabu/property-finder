@@ -105,14 +105,14 @@ function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
       lat: coordinates[0],
       lng: coordinates[1],
       metrics: {
-        area: formData.area ? parseFloat(formData.area) : 0,
-        rooms: formData.rooms ? parseInt(formData.rooms) : 0,
-        floor: formData.type === 'mieszkanie' && formData.floor ? parseInt(formData.floor) : null
+        area: formData.area && formData.area.trim() !== '' ? parseFloat(formData.area) : 0,
+        rooms: formData.rooms && formData.rooms.trim() !== '' ? parseInt(formData.rooms) : 0,
+        floor: formData.type === 'mieszkanie' && formData.floor && formData.floor.trim() !== '' ? parseInt(formData.floor) : null
       },
       details: {
         description: formData.description,
         amenities: formData.amenities ? formData.amenities.split(',').map(a => a.trim()) : [],
-        yearBuilt: formData.yearBuilt ? parseInt(formData.yearBuilt) : null
+        yearBuilt: formData.yearBuilt && formData.yearBuilt.trim() !== '' ? parseInt(formData.yearBuilt) : null
       }
     };
 
