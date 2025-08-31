@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropertyDetails from './PropertyDetails';
+import { formatPrice } from '../utils/formatPrice';
 
 function ListView({ properties, onDelete }) {
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -61,7 +62,7 @@ function ListView({ properties, onDelete }) {
             
             <div className="property-details">
               <div className="price">
-                <strong>{property.price} PLN</strong>
+                <strong>{formatPrice(property.price)} PLN</strong>
                 <span className="transaction-type">na {property.transactionType}</span>
               </div>
               

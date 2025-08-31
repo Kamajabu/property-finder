@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import PropertyDetails from './PropertyDetails';
+import { formatPrice } from '../utils/formatPrice';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -35,7 +36,7 @@ function MapView({ properties, onDelete }) {
             <Popup>
               <div className="popup-content">
                 <h3>{property.name}</h3>
-                <p><strong>Cena:</strong> {property.price} PLN</p>
+                <p><strong>Cena:</strong> {formatPrice(property.price)} PLN</p>
                 <p><strong>Typ:</strong> {property.type} na {property.transactionType}</p>
                 <p><strong>Powierzchnia:</strong> {property.metrics.area}m²</p>
                 <p><strong>Pokoje:</strong> {property.metrics.rooms}</p>

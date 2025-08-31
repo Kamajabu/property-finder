@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatPrice } from '../utils/formatPrice';
 
 function PropertyDetails({ property, isOpen, onClose }) {
   if (!isOpen || !property) return null;
@@ -13,7 +14,7 @@ function PropertyDetails({ property, isOpen, onClose }) {
         
         <div className="modal-content">
           <div className="price-section">
-            <div className="main-price">{property.price} PLN</div>
+            <div className="main-price">{formatPrice(property.price)} PLN</div>
             <div className="transaction-badge">
               {property.transactionType === 'wynajem' ? 'Wynajem' : 
                property.transactionType === 'sprzedaż' ? 'Sprzedaż' : property.transactionType}

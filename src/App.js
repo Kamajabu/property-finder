@@ -20,6 +20,15 @@ function App() {
   const loadProperties = async () => {
     try {
       setLoading(true);
+      
+      // Sprawdź czy Firebase jest skonfigurowane
+      if (!process.env.REACT_APP_FIREBASE_API_KEY) {
+        console.warn('Firebase nie jest skonfigurowane, używam danych lokalnych');
+        setProperties(propertiesData);
+        setLoading(false);
+        return;
+      }
+      
       const firebaseProperties = await getProperties();
       
       // Jeśli brak danych w Firebase, użyj danych z JSON jako początkowych
