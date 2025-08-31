@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, LayersControl } from 'react-leaflet';
+import React, { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, LayersControl, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import PropertyDetails from './PropertyDetails';
@@ -12,6 +12,21 @@ L.Icon.Default.mergeOptions({
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
+
+function FitBounds({ properties }) {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (properties.length > 0) {
+      const group = new L.featureGroup(
+        properties.map(property => L.marker(property.coordinates))
+      );
+      map.fitBounds(group.getBounds().pad(0.1));
+    }
+  }, [map, properties]);
+  
+  return null;
+}
 
 function MapView({ properties, onDelete, onEdit }) {
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -42,6 +57,7 @@ function MapView({ properties, onDelete, onEdit }) {
             />
           </LayersControl.BaseLayer>
         </LayersControl>
+        <FitBounds properties={properties} />
         {properties.map((property) => (
           <Marker key={property.id} position={property.coordinates}>
             <Popup>

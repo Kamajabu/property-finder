@@ -80,7 +80,7 @@ function ListView({ properties, onDelete, onEdit }) {
                     onClick={() => onDelete(property.id)}
                     className="delete-btn"
                   >
-                    ✕
+                    Usuń
                   </button>
                 </div>
               </div>

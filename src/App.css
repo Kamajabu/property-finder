@@ -237,8 +237,9 @@
 
 .property-header .delete-btn {
   margin: 0;
-  padding: 0.2rem 0.4rem;
-  font-size: 1rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: bold;
   line-height: 1;
 }
 
@@ -387,6 +388,7 @@
   font-size: 1rem;
 }
 
+
 .form-row textarea {
   resize: vertical;
   min-height: 80px;
@@ -444,6 +446,21 @@
 
 .search-address-btn:hover {
   background: #218838;
+}
+
+.map-preview {
+  width: 100%;
+}
+
+.map-preview h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.map-preview .leaflet-container {
+  border-radius: 8px;
+  border: 2px solid #ddd;
 }
 
 .loading, .error {

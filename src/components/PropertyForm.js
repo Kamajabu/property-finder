@@ -1,4 +1,15 @@
 import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix leaflet default markers
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
   const [formData, setFormData] = useState(property ? {
@@ -98,7 +109,7 @@ function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
       name: formData.name,
       link: formData.link,
       imageUrl: formData.imageUrl,
-      price: parseFloat(formData.price),
+      price: parseFloat(formData.price.replace(/\s/g, '')),
       currency: 'PLN',
       type: formData.type,
       transactionType: formData.transactionType,
@@ -187,7 +198,7 @@ function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
 
         <div className="form-row">
           <input
-            type="number"
+            type="text"
             name="price"
             placeholder="Cena *"
             value={formData.price}
@@ -227,7 +238,7 @@ function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
 
         <div className="form-row">
           <input
-            type="number"
+            type="text"
             step="any"
             name="lat"
             placeholder="Szerokość geograficzna (opcjonalne)"
@@ -235,7 +246,7 @@ function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
             onChange={handleChange}
           />
           <input
-            type="number"
+            type="text"
             step="any"
             name="lng"
             placeholder="Długość geograficzna (opcjonalne)"
@@ -244,31 +255,53 @@ function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
           />
         </div>
 
+        {formData.lat && formData.lng && (
+          <div className="form-row">
+            <div className="map-preview">
+              <h4>Podgląd Lokalizacji</h4>
+              <MapContainer 
+                center={[parseFloat(formData.lat), parseFloat(formData.lng)]} 
+                zoom={15} 
+                style={{ height: '200px', width: '100%' }}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; OpenStreetMap contributors'
+                />
+                <Marker position={[parseFloat(formData.lat), parseFloat(formData.lng)]} />
+              </MapContainer>
+            </div>
+          </div>
+        )}
+
         <div className="form-row">
           <input
-            type="number"
+            type="text"
             name="area"
             placeholder="Powierzchnia (m²)"
             value={formData.area}
             onChange={handleChange}
           />
           <input
-            type="number"
+            type="text"
             name="rooms"
             placeholder="Pokoje"
             value={formData.rooms}
             onChange={handleChange}
           />
-          {formData.type === 'mieszkanie' && (
+        </div>
+
+        {formData.type === 'mieszkanie' && (
+          <div className="form-row">
             <input
-              type="number"
+              type="text"
               name="floor"
               placeholder="Piętro"
               value={formData.floor}
               onChange={handleChange}
             />
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="form-row">
           <textarea
@@ -292,7 +325,7 @@ function PropertyForm({ onSubmit, onCancel, property, isEditing }) {
 
         <div className="form-row">
           <input
-            type="number"
+            type="text"
             name="yearBuilt"
             placeholder="Rok Budowy"
             value={formData.yearBuilt}
