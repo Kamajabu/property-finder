@@ -51,6 +51,41 @@
   padding: 2rem;
 }
 
+.combined-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  height: calc(100vh - 120px);
+}
+
+.map-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-section {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.list-container {
+  max-width: none;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+  background: rgba(248, 249, 250, 0.3);
+  border-radius: 10px;
+}
+
+.properties-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
 .map-container {
   border-radius: 10px;
   overflow: hidden;
@@ -110,18 +145,20 @@
   background: white;
 }
 
-.properties-list {
+.list-section .properties-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 
 .property-card {
   background: white;
   border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+  margin: 0.5rem 0;
 }
 
 .property-card:hover {
@@ -141,6 +178,29 @@
   margin-right: 1rem;
 }
 
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn-small {
+  background: transparent;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.edit-btn-small:hover {
+  background: #f8f9fa;
+  color: #495057;
+  border-color: #adb5bd;
+}
+
 .property-header .delete-btn {
   margin: 0;
   padding: 0.2rem 0.4rem;
@@ -152,7 +212,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .price strong {
@@ -160,23 +220,40 @@
   color: #2c3e50;
 }
 
-.transaction-type {
-  background: #f8f9fa;
-  padding: 0.2rem 0.5rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  color: #6c757d;
+.transaction-type,
+.type-badge {
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  vertical-align: baseline;
 }
 
-.type-badge {
-  background: #667eea;
-  color: white;
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  display: inline-block;
-  margin-bottom: 1rem;
+/* Kolory dla typów transakcji */
+.transaction-type[data-type="wynajem"] {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.transaction-type[data-type="sprzedaż"] {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Kolory dla typów nieruchomości */
+.type-badge[data-type="mieszkanie"] {
+  background: linear-gradient(135deg, #fd7e14 0%, #e55a4e 100%);
+  box-shadow: 0 2px 8px rgba(253, 126, 20, 0.3);
+}
+
+.type-badge[data-type="dom"] {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .metrics {
@@ -187,11 +264,18 @@
 }
 
 .metrics span {
-  background: #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 0.3rem 0.6rem;
   border-radius: 12px;
   font-size: 0.85rem;
   color: #495057;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.metrics .transaction-type,
+.metrics .type-badge {
+  color: white;
 }
 
 .description {
@@ -361,6 +445,11 @@
     padding: 1rem;
   }
 
+  .combined-view {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
   .properties-list {
     grid-template-columns: 1fr;
   }
@@ -468,7 +557,7 @@
 
 .price-section {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
@@ -486,6 +575,7 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-weight: 500;
+  font-size: 1rem;
 }
 
 .modal-content .type-badge {
@@ -494,6 +584,7 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-weight: 500;
+  font-size: 1rem;
 }
 
 .metrics-section {
@@ -572,10 +663,33 @@
   color: #6c757d;
 }
 
-.external-link-section {
-  text-align: center;
+.badges-container {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
   padding-top: 1rem;
   border-top: 1px solid #eee;
+  justify-content: center;
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: #212529;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.edit-btn:hover {
+  background: #e0a800;
 }
 
 .external-link-btn {

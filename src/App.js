@@ -31,13 +31,16 @@ function App() {
       
       const firebaseProperties = await getProperties();
       
-      // Jeśli brak danych w Firebase, użyj danych z JSON jako początkowych
+      // Zawsze używaj danych z Firebase
       if (firebaseProperties.length === 0) {
         // Dodaj przykładowe dane do Firebase
+        const addedProperties = [];
         for (const property of propertiesData) {
-          await addPropertyToFirebase(property);
+          const { id, ...propertyWithoutId } = property; // Usuń JSON ID
+          const addedProperty = await addPropertyToFirebase(propertyWithoutId);
+          addedProperties.push(addedProperty);
         }
-        setProperties(propertiesData);
+        setProperties(addedProperties);
       } else {
         setProperties(firebaseProperties);
       }
@@ -66,8 +69,23 @@ function App() {
   };
 
   const deleteProperty = async (id) => {
+    const property = properties.find(p => p.id === id);
+    console.log('Deleting property:', property);
+    console.log('Property ID being deleted:', id);
+    
+    const confirmed = window.confirm(`Czy na pewno chcesz usunąć "${property?.name}"?`);
+    
+    if (!confirmed) return;
+    
     try {
+      // Usuń tylko lokalnie jeśli Firebase nie jest skonfigurowane
+      if (!process.env.REACT_APP_FIREBASE_API_KEY) {
+        setProperties(properties.filter(p => p.id !== id));
+        return;
+      }
+      
       await deletePropertyFromFirebase(id);
+      console.log('Firebase delete completed, updating local state');
       setProperties(properties.filter(p => p.id !== id));
     } catch (err) {
       console.error('Błąd usuwania nieruchomości:', err);
@@ -80,12 +98,6 @@ function App() {
       <header className="header">
         <h1>Wyszukiwarka Nieruchomości</h1>
         <div className="controls">
-          <button 
-            onClick={() => setView(view === 'map' ? 'list' : 'map')}
-            className="view-toggle"
-          >
-            {view === 'map' ? 'Widok Lista' : 'Widok Mapa'}
-          </button>
           <button 
             onClick={() => setShowForm(!showForm)}
             className="add-property"
@@ -107,10 +119,15 @@ function App() {
           <div className="loading">Ładowanie...</div>
         ) : error ? (
           <div className="error">{error}</div>
-        ) : view === 'map' ? (
-          <MapView properties={properties} onDelete={deleteProperty} />
         ) : (
-          <ListView properties={properties} onDelete={deleteProperty} />
+          <div className="combined-view">
+            <div className="map-section">
+              <MapView properties={properties} onDelete={deleteProperty} />
+            </div>
+            <div className="list-section">
+              <ListView properties={properties} onDelete={deleteProperty} />
+            </div>
+          </div>
         )}
       </main>
     </div>

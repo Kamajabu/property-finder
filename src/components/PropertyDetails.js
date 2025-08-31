@@ -15,13 +15,15 @@ function PropertyDetails({ property, isOpen, onClose }) {
         <div className="modal-content">
           <div className="price-section">
             <div className="main-price">{formatPrice(property.price)} PLN</div>
-            <div className="transaction-badge">
-              {property.transactionType === 'wynajem' ? 'Wynajem' : 
-               property.transactionType === 'sprzedaż' ? 'Sprzedaż' : property.transactionType}
-            </div>
-            <div className="type-badge">
-              {property.type === 'mieszkanie' ? 'Mieszkanie' : 
-               property.type === 'dom' ? 'Dom' : property.type}
+            <div className="badges-container">
+              <div className="transaction-type" data-type={property.transactionType}>
+                {property.transactionType === 'wynajem' ? 'Wynajem' : 
+                 property.transactionType === 'sprzedaż' ? 'Sprzedaż' : property.transactionType}
+              </div>
+              <div className="type-badge" data-type={property.type}>
+                {property.type === 'mieszkanie' ? 'Mieszkanie' : 
+                 property.type === 'dom' ? 'Dom' : property.type}
+              </div>
             </div>
           </div>
 
@@ -75,8 +77,11 @@ function PropertyDetails({ property, isOpen, onClose }) {
             <p>Długość: {property.coordinates[1]}</p>
           </div>
 
-          {property.link && (
-            <div className="external-link-section">
+          <div className="action-buttons">
+            <button className="edit-btn" onClick={() => console.log('Edit', property.id)}>
+              Edytuj
+            </button>
+            {property.link && (
               <a 
                 href={property.link} 
                 target="_blank" 
@@ -85,8 +90,8 @@ function PropertyDetails({ property, isOpen, onClose }) {
               >
                 Otwórz Oryginalną Ofertę →
               </a>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

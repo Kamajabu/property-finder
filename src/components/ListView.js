@@ -5,6 +5,8 @@ import { formatPrice } from '../utils/formatPrice';
 function ListView({ properties, onDelete }) {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [editingProperty, setEditingProperty] = useState(null);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
@@ -52,23 +54,33 @@ function ListView({ properties, onDelete }) {
           <div key={property.id} className="property-card">
             <div className="property-header">
               <h3>{property.name}</h3>
-              <button 
-                onClick={() => onDelete(property.id)}
-                className="delete-btn"
-              >
-                ✕
-              </button>
+              <div className="card-actions">
+                <button 
+                  onClick={() => {
+                    setEditingProperty(property);
+                    setShowEditForm(true);
+                  }}
+                  className="edit-btn-small"
+                >
+                  ✏️
+                </button>
+                <button 
+                  onClick={() => onDelete(property.id)}
+                  className="delete-btn"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
             
             <div className="property-details">
               <div className="price">
                 <strong>{formatPrice(property.price)} PLN</strong>
-                <span className="transaction-type">na {property.transactionType}</span>
               </div>
               
-              <div className="type-badge">{property.type}</div>
-              
               <div className="metrics">
+                <span className="transaction-type" data-type={property.transactionType}>na {property.transactionType}</span>
+                <span className="type-badge" data-type={property.type}>{property.type}</span>
                 <span>{property.metrics.area}m²</span>
                 <span>{property.metrics.rooms} pokoi</span>
                 {property.metrics.floor && <span>Piętro {property.metrics.floor}</span>}
