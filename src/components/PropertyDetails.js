@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { formatPrice } from '../utils/formatPrice';
 import { getPriceColor, getPriceLightColor } from '../utils/colorUtils';
 
@@ -90,8 +91,20 @@ function PropertyDetails({ property, isOpen, onClose, onEdit }) {
 
           <div className="coordinates-section">
             <h3>Lokalizacja</h3>
-            <p>Szerokość: {property.coordinates[0]}</p>
-            <p>Długość: {property.coordinates[1]}</p>
+            <div className="location-map">
+              <MapContainer 
+                center={property.coordinates} 
+                zoom={15} 
+                style={{ height: '250px', width: '100%', borderRadius: '10px' }}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={property.coordinates} />
+              </MapContainer>
+            </div>
+            <p>Współrzędne: {property.coordinates[0]}, {property.coordinates[1]}</p>
           </div>
 
           <div className="action-buttons">
