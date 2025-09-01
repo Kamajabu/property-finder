@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 // UWAGA: Musisz zastąpić te wartości swoimi kluczami z Firebase Console
 // Idź na https://console.firebase.google.com/
@@ -20,5 +21,6 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
+export const auth = getAuth(app);
 
 export default app;

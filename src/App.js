@@ -3,6 +3,7 @@ import './App.css';
 import MapView from './components/MapView';
 import ListView from './components/ListView';
 import PropertyForm from './components/PropertyForm';
+import Auth from './components/Auth';
 import { getProperties, addProperty as addPropertyToFirebase, updateProperty as updatePropertyInFirebase, deleteProperty as deletePropertyFromFirebase } from './services/propertyService';
 import propertiesData from './data/properties.json';
 
@@ -13,8 +14,12 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastAddedProperty, setLastAddedProperty] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Check if user was previously authenticated
+    const wasAuthenticated = localStorage.getItem('propertyAuth') === 'true';
+    setIsAuthenticated(wasAuthenticated);
     loadProperties();
   }, []);
 
@@ -135,6 +140,10 @@ function App() {
     }
   };
 
+  if (!isAuthenticated) {
+    return <Auth onAuth={setIsAuthenticated} />;
+  }
+
   return (
     <div className="App">
       <header className="header">
@@ -145,6 +154,15 @@ function App() {
             className="add-property"
           >
             {showForm ? 'Anuluj' : 'Dodaj Nieruchomość'}
+          </button>
+          <button 
+            onClick={() => {
+              localStorage.removeItem('propertyAuth');
+              setIsAuthenticated(false);
+            }}
+            className="logout-btn"
+          >
+            Wyloguj
           </button>
         </div>
       </header>
