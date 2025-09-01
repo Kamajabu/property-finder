@@ -558,6 +558,41 @@
 
   .list-controls {
     flex-direction: column;
+    padding: 1rem;
+  }
+
+  .list-container {
+    padding: 0.5rem;
+  }
+
+  .property-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .property-image {
+    width: 100%;
+    height: 200px;
+    flex: none;
+  }
+
+  .property-content {
+    min-height: auto;
+    padding: 1.5rem;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .metrics {
+    gap: 0.5rem;
+  }
+
+  .metrics span {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
   }
 }
 
